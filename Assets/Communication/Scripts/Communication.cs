@@ -17,9 +17,6 @@ public class Communication : MonoBehaviour {
 		Debug.Log("Communication initialized");
 	}
 
-	void Update(){
-	}
-
 	bool InitializeCommunication(){
 		if(!PhraseRecognitionSystem.isSupported){
 			return false;
@@ -37,7 +34,6 @@ public class Communication : MonoBehaviour {
 	}
 
 	void OnVoiceRecognition(PhraseRecognizedEventArgs args){
-		Debug.Log("Enter in OnVoiceRecognition method");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.AppendFormat("{0} ({1}){2}", args.text, args.confidence, Environment.NewLine);
         stringBuilder.AppendFormat("\tTimestamp: {0}{1}", args.phraseStartTime, Environment.NewLine);
