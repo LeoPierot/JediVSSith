@@ -5,20 +5,79 @@ using Valve.VR;
 
 public class HandManipulation : MonoBehaviour
 {
-    Vector3 offset = new Vector3(0.0f, 0.0f, 0.0f);
+    private Rigidbody rb;
+    private GameObject pickableObject;
+    private GameObject pickedObject;
+    public bool isRightHand;
 
-	void Start ()
+    void Start()
     {
-
+        rb = GetComponent<Rigidbody>();
+        pickableObject = null;
     }
-	
-	void Update ()
+
+    void Update()
     {
-        if (SteamVR_Input._default.inActions.GrabGrip.GetStateDown(SteamVR_Input_Sources.LeftHand))
+
+        if (GrabGripDown())
         {
-            //GameObject toCatch = null;
-            //toCatch.transform.position = transform.position + offset;
-            Debug.Log("Fuck off");
+            pickedObject = pickableObject;
         }
+        else if (GrabGripUp())
+        {
+            Debug.Log(pickedObject);
+            if (pickedObject)
+            {
+                if (isRightHand)
+                {
+
+                    pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonRightHand.GetVelocity(SteamVR_Input_Sources.RightHand);
+                }
+                else
+                {
+                    pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonLeftHand.GetVelocity(SteamVR_Input_Sources.LeftHand);
+                }
+                pickedObject = null;
+            }
+            Debug.Log(pickedObject);
+        }
+        if (pickedObject)
+        {
+            pickedObject.transform.position = transform.position;
+        }
+    }
+
+    void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Pickable"))
+        {
+            pickableObject = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Pickable"))
+        {
+            pickableObject = null;
+        }
+    }
+
+    bool GrabGripDown()
+    {
+        if (isRightHand)
+        {
+            return SteamVR_Input._default.inActions.GrabGrip.GetStateDown(SteamVR_Input_Sources.RightHand);
+        }
+        return SteamVR_Input._default.inActions.GrabGrip.GetStateDown(SteamVR_Input_Sources.LeftHand);
+    }
+
+    bool GrabGripUp()
+    {
+        if (isRightHand)
+        {
+            return SteamVR_Input._default.inActions.GrabGrip.GetStateUp(SteamVR_Input_Sources.RightHand);
+        }
+        return SteamVR_Input._default.inActions.GrabGrip.GetStateUp(SteamVR_Input_Sources.LeftHand);
     }
 }
