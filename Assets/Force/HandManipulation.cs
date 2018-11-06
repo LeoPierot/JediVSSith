@@ -22,6 +22,7 @@ public class HandManipulation : MonoBehaviour
         if (GrabGripDown())
         {
             pickedObject = pickableObject;
+            pickedObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else if (GrabGripUp())
         {
@@ -30,11 +31,12 @@ public class HandManipulation : MonoBehaviour
             {
                 if (isRightHand)
                 {
-
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonRightHand.GetVelocity(SteamVR_Input_Sources.RightHand);
                 }
                 else
                 {
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonLeftHand.GetVelocity(SteamVR_Input_Sources.LeftHand);
                 }
                 pickedObject = null;
