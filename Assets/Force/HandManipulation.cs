@@ -11,19 +11,19 @@ public enum MANIPULATION_MODE
 
 public class HandManipulation : MonoBehaviour
 {
-    private Rigidbody rb;
-    private GameObject pickableObject;
-    private GameObject pickedObject;
-    public bool isRightHand;
+    private Rigidbody   rb;
+    private GameObject  pickableObject;
+    private GameObject  pickedObject;
+    public bool         isRightHand;
 
     public Transform LeftHand = null;
     public Transform RightHand = null;
 
-    private MANIPULATION_MODE   m_ManipulationMode = MANIPULATION_MODE.HAND;
-    private Transform           m_HandManipulating = null;
-    private SteamVR_Input_Sources m_ManipulatingHandIndex;
-    private List<Transform>     m_ObjectsUnderForce = new List<Transform>();
-    private Vector3 m_LastHandPosition = Vector3.zero;
+    private MANIPULATION_MODE       m_ManipulationMode = MANIPULATION_MODE.HAND;
+    private Transform               m_HandManipulating = null;
+    private SteamVR_Input_Sources   m_ManipulatingHandIndex;
+    private List<Transform>         m_ObjectsUnderForce = new List<Transform>();
+    private Vector3                 m_LastHandPosition = Vector3.zero;
 
     void Start()
     {
@@ -116,7 +116,6 @@ public class HandManipulation : MonoBehaviour
 
     private IEnumerator ForceManipulationCoroutine()
     {
-        bool oops = false;
         m_ManipulationMode = MANIPULATION_MODE.FORCE;
 
         while(m_ManipulationMode == MANIPULATION_MODE.FORCE)
@@ -144,7 +143,6 @@ public class HandManipulation : MonoBehaviour
 
             foreach (Transform obj in m_ObjectsUnderForce)
             {
-                //obj.transform.position = transform.position;
                 if (Vector3.Distance(obj.position, rb.transform.position) < 1f)
                 {
                     obj.GetComponent<Rigidbody>().isKinematic = true;
@@ -153,19 +151,8 @@ public class HandManipulation : MonoBehaviour
                     {
                         Destroy(obj.GetComponent<SpringJoint>());
                     }
-                    oops = true;
-                    //obj.parent = m_HandManipulating;
-                    //obj.RotateAround(m_HandManipulating.position, Vector3.up, 500 * Time.deltaTime);
-                }
-            }
-
-            if(oops)
-            {
-                foreach (Transform obj in m_ObjectsUnderForce)
-                {
                     obj.position = m_HandManipulating.position;
                 }
-
             }
 
             if (SteamVR_Input._default.inActions.GrabPinch.GetStateUp(m_ManipulatingHandIndex))
@@ -177,12 +164,11 @@ public class HandManipulation : MonoBehaviour
                     if (obj.GetComponent<Rigidbody>())
                     {
                         obj.GetComponent<Rigidbody>().isKinematic = false;
-                        //obj.parent = null;
                         if (obj.GetComponent<SpringJoint>())
                         {
                             Destroy(obj.GetComponent<SpringJoint>());
                         }
-                        obj.GetComponent<Rigidbody>().AddForce(((m_HandManipulating.position - m_LastHandPosition) * 500) + (m_HandManipulating.forward * 50));
+                        obj.GetComponent<Rigidbody>().AddForce(((m_HandManipulating.position - m_LastHandPosition) * 600) + (m_HandManipulating.forward * 100));
                         obj.GetComponent<Rigidbody>().useGravity = true;
                     }
                 }
@@ -196,7 +182,6 @@ public class HandManipulation : MonoBehaviour
         }
 
         m_HandManipulating = null;
-        oops = false;
     }
 
     private void AddAndConfigureSpringJoint(Rigidbody iObjectRb)
