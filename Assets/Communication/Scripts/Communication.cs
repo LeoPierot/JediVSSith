@@ -41,7 +41,7 @@ public class Communication : MonoBehaviour {
 	}
 
 	void OnDestroy(){
-		this.speachApi.OnPhraseRecognized -= OnVoiceRecognition;
-		this.speachApi.Stop();
+		this.speachAPI.OnPhraseRecognized -= OnVoiceRecognition;
+		this.speachAPI.Stop();
 	}
 }
