@@ -33,20 +33,25 @@ public class HandManipulation : MonoBehaviour
 
     void Update()
     {
-
-        if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
+        if (isRightHand)
         {
-            m_HandManipulating = LeftHand;
-            m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
-            StartCoroutine(ForceManipulationCoroutine());
+            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+            {
+                m_HandManipulating = RightHand;
+                m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
+                StartCoroutine(ForceManipulationCoroutine());
+            }
         }
-        if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+        else
         {
-            m_HandManipulating = RightHand;
-            m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
-            StartCoroutine(ForceManipulationCoroutine());
+            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
+            {
+                m_HandManipulating = LeftHand;
+                m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
+                StartCoroutine(ForceManipulationCoroutine());
+            }
         }
-
+        
         if (GrabGripDown())
         {
             pickedObject = pickableObject;
@@ -123,7 +128,7 @@ public class HandManipulation : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
             {
-                if (hit.collider.CompareTag("Grabable"))
+                if (hit.collider.CompareTag("Pickable"))
                 {
                     if (hit.collider.GetComponent<Rigidbody>())
                     {
