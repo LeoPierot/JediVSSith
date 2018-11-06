@@ -6,27 +6,38 @@ using UnityEngine.Windows.Speech;
 public class Communication : MonoBehaviour {
 
 	public KeywordRecognizer speachApi = null;
-	public string[] keyword;
+	public string[] keywords;
 
 	// Use this for initialization
 	void Start () {
-		if(!InitializeCommunication()){
+		if(!this.InitializeCommunication()){
 			return;
 		}
+
 		Debug.Log("Communication initialized");
+	}
+
+	void Update(){
 	}
 
 	bool InitializeCommunication(){
 		if(!PhraseRecognitionSystem.isSupported){
 			return false;
 		}
-		this.speachApi = new KeywordRecognizer(this.keyword);
+		if(this.keywords == null){
+			return false;
+		}
+		foreach(string element in this.keywords){
+			Debug.Log(element);
+		}
+		this.speachApi = new KeywordRecognizer(this.keywords);
 		this.speachApi.OnPhraseRecognized += OnVoiceRecognition;
 		this.speachApi.Start();
 		return true;
 	}
 
 	void OnVoiceRecognition(PhraseRecognizedEventArgs args){
+		Debug.Log("Enter in OnVoiceRecognition method");
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.AppendFormat("{0} ({1}){2}", args.text, args.confidence, Environment.NewLine);
         stringBuilder.AppendFormat("\tTimestamp: {0}{1}", args.phraseStartTime, Environment.NewLine);
