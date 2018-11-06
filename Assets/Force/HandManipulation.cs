@@ -13,6 +13,7 @@ public class HandManipulation : MonoBehaviour
 {
     public Transform LeftHand = null;
     public Transform RightHand = null;
+    public Rigidbody ForceConnectedRb = null;
 
     private MANIPULATION_MODE   m_ManipulationMode = MANIPULATION_MODE.HAND;
     private Transform           m_HandManipulating = null;
@@ -58,8 +59,13 @@ public class HandManipulation : MonoBehaviour
                 {
                     if (hit.collider.GetComponent<Rigidbody>())
                     {
-                        hit.collider.GetComponent<Rigidbody>().isKinematic = true;
+                        //hit.collider.GetComponent<Rigidbody>().isKinematic = true;
+                        if (!hit.collider.GetComponent<SpringJoint>())
+                        {
+                            AddAndConfigureSpringJoint(hit.collider.GetComponent<Rigidbody>());
+                        }
                     }
+                    
                     m_ObjectsUnderForce.Add(hit.collider.transform);
                 }
             }
@@ -71,7 +77,7 @@ public class HandManipulation : MonoBehaviour
 
             foreach (Transform obj in m_ObjectsUnderForce)
             {
-                obj.transform.position = transform.position;
+                //obj.transform.position = transform.position;
             }
 
             if (SteamVR_Input._default.inActions.GrabPinch.GetStateUp(m_ManipulatingHandIndex))
@@ -82,7 +88,9 @@ public class HandManipulation : MonoBehaviour
                 {
                     if (obj.GetComponent<Rigidbody>())
                     {
-                        obj.GetComponent<Rigidbody>().isKinematic = false;
+                        //obj.GetComponent<Rigidbody>().isKinematic = false;
+                        Destroy(obj.GetComponent<SpringJoint>());
+                        obj.GetComponent<Rigidbody>().useGravity = true;
                     }
                 }
                 m_ObjectsUnderForce.Clear();
@@ -92,6 +100,31 @@ public class HandManipulation : MonoBehaviour
         }
 
         m_HandManipulating = null;
+    }
+
+    private void AddAndConfigureSpringJoint(Rigidbody iObjectRb)
+    {
+        iObjectRb.useGravity = false;
+        SpringJoint AddedSpringJoint = iObjectRb.gameObject.AddComponent<SpringJoint>();
+        AddedSpringJoint.connectedBody = ForceConnectedRb;
+        AddedSpringJoint.anchor = Vector3.zero;
+        AddedSpringJoint.autoConfigureConnectedAnchor = false;
+        AddedSpringJoint.connectedAnchor = Vector3.zero;
+        AddedSpringJoint.spring = 10;
+        AddedSpringJoint.damper = 1;
+    }
+
+    private IEnumerator ManageDampingSpringJoint(Transform iObjectConnected)
+    {
+        SpringJoint joint = iObjectConnected.gameObject.GetComponent<SpringJoint>();
+        while (m_ManipulationMode == MANIPULATION_MODE.FORCE)
+        {
+            float dist = Vector3.Distance(iObjectConnected.position, ForceConnectedRb.transform.position);
+
+            //joint.damper = 
+
+            yield return null;
+        }
     }
 
 }
