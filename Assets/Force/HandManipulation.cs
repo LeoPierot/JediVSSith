@@ -18,12 +18,14 @@ public class HandManipulation : MonoBehaviour
 
     public Transform LeftHand = null;
     public Transform RightHand = null;
+    public int meanHandMovement = 40;
 
     private MANIPULATION_MODE       m_ManipulationMode = MANIPULATION_MODE.HAND;
     private Transform               m_HandManipulating = null;
     private SteamVR_Input_Sources   m_ManipulatingHandIndex;
     private List<Transform>         m_ObjectsUnderForce = new List<Transform>();
     private Vector3                 m_LastHandPosition = Vector3.zero;
+    private Queue<Vector3>           m_LastHandPositions = new Queue<Vector3>();
 
     void Start()
     {
@@ -118,41 +120,39 @@ public class HandManipulation : MonoBehaviour
     {
         m_ManipulationMode = MANIPULATION_MODE.FORCE;
 
+        bool objectUsingGravity = false;
         while(m_ManipulationMode == MANIPULATION_MODE.FORCE)
         {
+
+            //pour l'enregistrement du mouvement de la main
             if (m_LastHandPosition == Vector3.zero)
             {
                 m_LastHandPosition = m_HandManipulating.position;
             }
 
+            //on envoie un rayon devant la main.
             RaycastHit hit;
+            //si le rayon touche un objet...
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
             {
-                if (hit.collider.CompareTag("Pickable"))
+                //si on n'est pas déjà en train de manipuler un objet par la force...
+                if (m_ObjectsUnderForce.Count == 0)
                 {
-                    if (hit.collider.GetComponent<Rigidbody>())
+                    //si l'objet est attrapable
+                    if (hit.collider.CompareTag("Pickable"))
                     {
-                        if (!hit.collider.GetComponent<SpringJoint>())
+                        if (hit.collider.GetComponent<Rigidbody>())
                         {
-                            AddAndConfigureSpringJoint(hit.collider.GetComponent<Rigidbody>());
+                            objectUsingGravity = hit.collider.GetComponent<Rigidbody>();
+                            if (!hit.collider.GetComponent<SpringJoint>())
+                            {
+                                //on relie la main et l'objet par un spring joint.
+                                AddAndConfigureSpringJoint(hit.collider.GetComponent<Rigidbody>());
+                            }
                         }
-                    }
-                    
-                    m_ObjectsUnderForce.Add(hit.collider.transform);
-                }
-            }
 
-            foreach (Transform obj in m_ObjectsUnderForce)
-            {
-                if (Vector3.Distance(obj.position, rb.transform.position) < 1f)
-                {
-                    obj.GetComponent<Rigidbody>().isKinematic = true;
-
-                    if (obj.GetComponent<SpringJoint>())
-                    {
-                        Destroy(obj.GetComponent<SpringJoint>());
+                        m_ObjectsUnderForce.Add(hit.collider.transform);
                     }
-                    obj.position = m_HandManipulating.position;
                 }
             }
 
@@ -164,18 +164,30 @@ public class HandManipulation : MonoBehaviour
                 {
                     if (obj.GetComponent<Rigidbody>())
                     {
-                        obj.GetComponent<Rigidbody>().isKinematic = false;
                         if (obj.GetComponent<SpringJoint>())
                         {
                             Destroy(obj.GetComponent<SpringJoint>());
                         }
-                        obj.GetComponent<Rigidbody>().AddForce(((m_HandManipulating.position - m_LastHandPosition) * 600) + (m_HandManipulating.forward * 100));
-                        obj.GetComponent<Rigidbody>().useGravity = true;
+
+                        Vector3 forceDirection = Vector3.zero;
+                        foreach (Vector3 handPosition in m_LastHandPositions)
+                        {
+                            forceDirection += handPosition;
+                        }
+                        forceDirection /= m_LastHandPositions.Count;
+
+                        obj.GetComponent<Rigidbody>().velocity += (((m_HandManipulating.position - m_LastHandPosition) * 1000));
+                        obj.GetComponent<Rigidbody>().useGravity = objectUsingGravity;
                     }
                 }
                 m_ObjectsUnderForce.Clear();
             }
 
+            m_LastHandPositions.Enqueue(m_HandManipulating.position);
+            while (m_LastHandPositions.Count > meanHandMovement)
+            {
+                m_LastHandPositions.Dequeue();
+            }
 
             m_LastHandPosition = m_HandManipulating.position;
 
@@ -189,12 +201,13 @@ public class HandManipulation : MonoBehaviour
     {
         iObjectRb.useGravity = false;
         SpringJoint AddedSpringJoint = iObjectRb.gameObject.AddComponent<SpringJoint>();
+        LookUpTableSpringJoint objectSpringJointCaracteristics = iObjectRb.GetComponent<LookUpTableSpringJoint>();
         AddedSpringJoint.connectedBody = rb;
         AddedSpringJoint.anchor = Vector3.zero;
         AddedSpringJoint.autoConfigureConnectedAnchor = false;
         AddedSpringJoint.connectedAnchor = Vector3.zero;
-        AddedSpringJoint.spring = 10;
-        AddedSpringJoint.damper = 1;
         
+        AddedSpringJoint.spring = objectSpringJointCaracteristics.StrengthJoint;
+        AddedSpringJoint.damper = objectSpringJointCaracteristics.SpringDamping;
     }
 }
