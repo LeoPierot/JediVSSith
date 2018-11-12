@@ -3,8 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - damage
+  tags: [
+  damage
+  ]
   layers:
   - Default
   - TransparentFX

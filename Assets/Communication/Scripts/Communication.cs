@@ -13,7 +13,6 @@ public class Communication : MonoBehaviour {
 		if(!this.InitializeCommunication()){
 			return;
 		}
-
 		Debug.Log("Communication initialized");
 	}
 
@@ -39,5 +38,10 @@ public class Communication : MonoBehaviour {
         stringBuilder.AppendFormat("\tTimestamp: {0}{1}", args.phraseStartTime, Environment.NewLine);
         stringBuilder.AppendFormat("\tDuration: {0} seconds{1}", args.phraseDuration.TotalSeconds, Environment.NewLine);
         Debug.Log(stringBuilder.ToString());
+	}
+
+	void OnDestroy(){
+		this.speachApi.OnPhraseRecognized -= OnVoiceRecognition;
+		this.speachApi.Stop();
 	}
 }
