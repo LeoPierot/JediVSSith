@@ -98,6 +98,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectile: {fileID: 54436127402513732, guid: b7b474b8473fc334d874e47d8f425f1d,
     type: 2}
+  camera: {fileID: 0}
+  bulletSpeed: 5
+  spacing: 0.25
 --- !u!136 &136564783099592822
 CapsuleCollider:
   m_ObjectHideFlags: 1

@@ -34,6 +34,7 @@ public class CollisionPlayer : MonoBehaviour {
 	}
 
 	void OnCollisionEnter(Collision collision){
+		if(collision.gameObject.tag == "damage"){
 		life -= 1;
 		timeToRegen += timeRoRegenValue;
 
@@ -49,6 +50,7 @@ public class CollisionPlayer : MonoBehaviour {
 		}
 
 		Destroy(collision.rigidbody.gameObject);
+		}
 	}
 
 	private void reduceTimer(){

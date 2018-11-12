@@ -19,6 +19,7 @@ public class Capsule : MonoBehaviour {
 		this.transform.LookAt(camera.transform);
 		float rand = Random.Range(-1, 2)* spacing;
 		Rigidbody instance = Instantiate(projectile, this.transform.position + this.transform.forward + this.transform.right*rand, Quaternion.identity);
+		instance.tag = "damage";
 		instance.velocity = bulletSpeed*this.transform.forward;
 		Destroy(instance.gameObject, 10f);
 	}
