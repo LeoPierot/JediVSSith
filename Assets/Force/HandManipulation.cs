@@ -33,6 +33,12 @@ public class HandManipulation : MonoBehaviour
 
     void Update()
     {
+        midiclorianManipulation();
+        humanManipulation();
+    }
+
+    void midiclorianManipulation()
+    {
         if (isRightHand)
         {
             if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
@@ -51,7 +57,11 @@ public class HandManipulation : MonoBehaviour
                 StartCoroutine(ForceManipulationCoroutine());
             }
         }
-        
+
+    }
+
+    void humanManipulation()
+    {
         if (GrabGripDown())
         {
             pickedObject = pickableObject;
@@ -127,8 +137,9 @@ public class HandManipulation : MonoBehaviour
                 m_LastHandPosition = m_HandManipulating.position;
             }
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
-            {
+            //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+            if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
+                {
                 if (hit.collider.CompareTag("Pickable"))
                 {
                     if (hit.collider.GetComponent<Rigidbody>())
@@ -171,6 +182,7 @@ public class HandManipulation : MonoBehaviour
                             Destroy(obj.GetComponent<SpringJoint>());
                         }
                         obj.GetComponent<Rigidbody>().AddForce(((m_HandManipulating.position - m_LastHandPosition) * 600) + (m_HandManipulating.forward * 100));
+                        //obj.GetComponent<Rigidbody>().velocity = (m_HandManipulating.position - m_LastHandPosition) * 600 + transform.forward * 100;
                         obj.GetComponent<Rigidbody>().useGravity = true;
                     }
                 }
