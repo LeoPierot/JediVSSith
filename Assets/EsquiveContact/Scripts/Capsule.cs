@@ -10,9 +10,12 @@ public class Capsule : MonoBehaviour {
 	public float bulletSpeed = 5f;
 	public float spacing = 0.25f;
 
-	// Use this for initialization
 	void Start () {
 		 InvokeRepeating("LaunchProjectile", 2.0f, 1.5f);
+	}
+	
+	void update(){
+		GameObject.Find("[CameraRig]/ColliderJambes").transform.rotation = Quaternion.Euler(0, this.transform.rotation.y,0);
 	}
 
 	void LaunchProjectile() {
