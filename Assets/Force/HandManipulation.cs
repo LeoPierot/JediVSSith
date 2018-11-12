@@ -136,6 +136,7 @@ public class HandManipulation : MonoBehaviour
             {
                 m_LastHandPosition = m_HandManipulating.position;
             }
+
             RaycastHit hit;
             //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
             if (Physics.Raycast(transform.position, transform.forward, out hit, Mathf.Infinity))
