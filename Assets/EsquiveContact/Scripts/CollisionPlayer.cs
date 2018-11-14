@@ -31,34 +31,26 @@ public class CollisionPlayer : MonoBehaviour {
 		if (timeToRegen > timeRoRegenValue){
 			timeToRegen = timeRoRegenValue;
 		}
-		Debug.Log("fade "+fade);
-		Debug.Log("life "+life);
 	}
 
 	void OnCollisionEnter(Collision collision){
-        if (collision.collider.CompareTag("Harmful"))
-        {
-            life -= 1;
-            timeToRegen += timeRoRegenValue;
+		if(collision.gameObject.tag == "damage"){
+		life -= 1;
+		timeToRegen += timeRoRegenValue;
 
-            if (life < maxLife && life > lifeSeuil1)
-            {
-                fade = 0.5f;
-                blood.GetComponent<CanvasGroup>().alpha = fade;
-            }
-            else if (life < lifeSeuil2 && life > 0)
-            {
-                fade = 0.8f;
-                blood.GetComponent<CanvasGroup>().alpha = fade;
-            }
-            else if (life <= 0)
-            {
-                Debug.Log("you died");
-            }
+		if(life < maxLife && life >lifeSeuil1){
+			fade = 0.5f;
+			blood.GetComponent<CanvasGroup>().alpha = fade;
+		}
+		else if(life < lifeSeuil2 && life > 0){
+			fade = 0.8f;
+			blood.GetComponent<CanvasGroup>().alpha = fade;
+		}
+		else if(life <= 0){
+		}
 
-            Destroy(collision.rigidbody.gameObject);
-        }
-		
+		Destroy(collision.rigidbody.gameObject);
+		}
 	}
 
 	private void reduceTimer(){
