@@ -74,9 +74,10 @@ public class HandManipulation : MonoBehaviour
                     }
                 }
             }
+            //si la main ne vise plus d'objet en particulier, on enlève l'outline de l'objet qui était en train d'être visé.
             else
             {
-                if (m_ForceFocusedObject)
+                if (m_ForceFocusedObject && m_ManipulationMode != MANIPULATION_MODE.FORCE)
                 {
                     m_ForceFocusedObject.GetComponent<Outline>().enabled = false;
                     m_ForceFocusedObject = null;
