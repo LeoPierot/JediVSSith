@@ -24,17 +24,20 @@ public class CollisionBetweenObj : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// detection de la collision
+    /// </summary>
+    /// <param name="col"></param>
     void OnCollisionEnter(Collision col)
     {
+        // Todo : ecrire les différents conditions lors de la collision 
         if (col.gameObject.name == "Zone_Fight")
         {
             source.Play();
-            Debug.Log("COLLISION");
         }
         else
         {
             source.Play();
-            Debug.Log("COLLISION");
         }
     }
 }
