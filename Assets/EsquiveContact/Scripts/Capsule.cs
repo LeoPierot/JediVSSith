@@ -24,6 +24,5 @@ public class Capsule : MonoBehaviour {
 		Rigidbody instance = Instantiate(projectile, this.transform.position + this.transform.forward + this.transform.right*rand, Quaternion.identity);
 		instance.tag = "damage";
 		instance.velocity = bulletSpeed*this.transform.forward;
-		Destroy(instance.gameObject, 10f);
 	}
 }
