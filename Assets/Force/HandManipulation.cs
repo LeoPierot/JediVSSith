@@ -18,7 +18,7 @@ public class HandManipulation : MonoBehaviour
         {
             //GameObject toCatch = null;
             //toCatch.transform.position = transform.position + offset;
-            Debug.Log("Fuck off");
+            Debug.Log("F*ck off");
         }
     }
 }
