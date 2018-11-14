@@ -98,12 +98,12 @@ namespace DigitalRuby.LaserSword
             else
             {
                 Blade.SetActive(true);
-                BladeGlow.gameObject.SetActive(true);
+                BladeGlow.gameObject.SetActive(false);
             }
             BladeGlow.SetColors(new Color(1.0f, 1.0f, 1.0f, bladeIntensity), new Color(1.0f, 1.0f, 1.0f, bladeIntensity));
             BladeGlow.SetPosition(0, BladeStart.transform.position - (Root.transform.up * creationScript.BladeHeight * 0.075f));
             BladeGlow.SetPosition(1, BladeEnd.transform.position);
-            Light.intensity = percent;
+            Light.intensity = 1.0f;
         }
 
         private void Start()
