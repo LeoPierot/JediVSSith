@@ -25,7 +25,8 @@ public class HandManipulation : MonoBehaviour
     private SteamVR_Input_Sources   m_ManipulatingHandIndex;
     private List<Transform>         m_ObjectsUnderForce = new List<Transform>();
     private Vector3                 m_LastHandPosition = Vector3.zero;
-    private Queue<Vector3>           m_LastHandPositions = new Queue<Vector3>();
+    private Queue<Vector3>          m_LastHandPositions = new Queue<Vector3>();
+    [SerializeField] private bool   m_CarryingSaber = false;
 
     void Start()
     {
@@ -35,28 +36,43 @@ public class HandManipulation : MonoBehaviour
 
     void Update()
     {
-        if (isRightHand)
+        midiclorianManipulation();
+        humanManipulation();
+    }
+
+    void midiclorianManipulation()
+    {
+        if(!m_CarryingSaber)
         {
-            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+            if (isRightHand)
             {
-                m_HandManipulating = RightHand;
-                m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
-                StartCoroutine(ForceManipulationCoroutine());
+                if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+                {
+                    m_HandManipulating = RightHand;
+                    m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
+                    StartCoroutine(ForceManipulationCoroutine());
+                }
             }
-        }
-        else
-        {
-            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
+            else
             {
-                m_HandManipulating = LeftHand;
-                m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
-                StartCoroutine(ForceManipulationCoroutine());
+                if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
+                {
+                    m_HandManipulating = LeftHand;
+                    m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
+                    StartCoroutine(ForceManipulationCoroutine());
+                }
             }
         }
         
-        if (GrabGripDown())
+
+    }
+
+    void humanManipulation()
+    {
+        if (GrabGripDown()) 
         {
             pickedObject = pickableObject;
+            pickedObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else if (GrabGripUp())
         {
@@ -65,11 +81,12 @@ public class HandManipulation : MonoBehaviour
             {
                 if (isRightHand)
                 {
-
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonRightHand.GetVelocity(SteamVR_Input_Sources.RightHand);
                 }
                 else
                 {
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonLeftHand.GetVelocity(SteamVR_Input_Sources.LeftHand);
                 }
                 pickedObject = null;
@@ -86,7 +103,8 @@ public class HandManipulation : MonoBehaviour
     {
         if (other.CompareTag("Pickable"))
         {
-            pickableObject = other.gameObject;
+            if (other.GetComponent<Collider>().bounds.size.x < 5 && other.GetComponent<Collider>().bounds.size.y < 5 && other.GetComponent<Collider>().bounds.size.z < 5)
+                pickableObject = other.gameObject;
         }
     }
 
@@ -141,13 +159,16 @@ public class HandManipulation : MonoBehaviour
                     //si l'objet est attrapable
                     if (hit.collider.CompareTag("Pickable"))
                     {
-                        if (hit.collider.GetComponent<Rigidbody>())
+                        Rigidbody CaughtObjectRb = hit.collider.GetComponent<Rigidbody>();
+                        if (CaughtObjectRb)
                         {
-                            objectUsingGravity = hit.collider.GetComponent<Rigidbody>();
+                            objectUsingGravity = CaughtObjectRb.useGravity;
+                            //on supprime son mouvement courant
+                            CaughtObjectRb.velocity = Vector3.zero;
                             if (!hit.collider.GetComponent<SpringJoint>())
                             {
                                 //on relie la main et l'objet par un spring joint.
-                                AddAndConfigureSpringJoint(hit.collider.GetComponent<Rigidbody>());
+                                AddAndConfigureSpringJoint(CaughtObjectRb);
                             }
                         }
 
@@ -156,19 +177,25 @@ public class HandManipulation : MonoBehaviour
                 }
             }
 
+            //si la gâchette est relâchée
             if (SteamVR_Input._default.inActions.GrabPinch.GetStateUp(m_ManipulatingHandIndex))
             {
+                //on change de mode de manipulation pour sortir du while()
                 m_ManipulationMode = MANIPULATION_MODE.HAND;
 
+                //pour tous les objets sous influence de la force, on...
                 foreach (Transform obj in m_ObjectsUnderForce)
                 {
-                    if (obj.GetComponent<Rigidbody>())
+                    Rigidbody releasedObjectRb = obj.GetComponent<Rigidbody>();
+                    if (releasedObjectRb)
                     {
+                        //détruit le spring joint entre la main et l'objet
                         if (obj.GetComponent<SpringJoint>())
                         {
                             Destroy(obj.GetComponent<SpringJoint>());
                         }
 
+                        //calcule le direction moyenne de la main sur les x dernières frames, not used lol
                         Vector3 forceDirection = Vector3.zero;
                         foreach (Vector3 handPosition in m_LastHandPositions)
                         {
@@ -176,12 +203,15 @@ public class HandManipulation : MonoBehaviour
                         }
                         forceDirection /= m_LastHandPositions.Count;
 
-                        obj.GetComponent<Rigidbody>().velocity += (((m_HandManipulating.position - m_LastHandPosition) * 1000));
-                        obj.GetComponent<Rigidbody>().useGravity = objectUsingGravity;
+                        //on ajoute la nouvelle force calculée à l'objet. Actually no but whatever
+                        releasedObjectRb.velocity += (((m_HandManipulating.position - m_LastHandPosition) * 1000));
+                        releasedObjectRb.useGravity = objectUsingGravity;
+                        obj.gameObject.AddComponent<SlowDownWithDistance>();
                     }
                 }
                 m_ObjectsUnderForce.Clear();
             }
+
 
             m_LastHandPositions.Enqueue(m_HandManipulating.position);
             while (m_LastHandPositions.Count > meanHandMovement)
