@@ -31,11 +31,10 @@ public class CollisionPlayer : MonoBehaviour {
 		if (timeToRegen > timeRoRegenValue){
 			timeToRegen = timeRoRegenValue;
 		}
-		Debug.Log("fade "+fade);
-		Debug.Log("life "+life);
 	}
 
-	void OnCollisionEnter(Collision collision){
+	void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag == "damage"){
 		life -= 1;
 		timeToRegen += timeRoRegenValue;
 
@@ -48,10 +47,10 @@ public class CollisionPlayer : MonoBehaviour {
 			blood.GetComponent<CanvasGroup>().alpha = fade;
 		}
 		else if(life <= 0){
-			Debug.Log("you died");
 		}
 
-		Destroy(collision.rigidbody.gameObject);
+		Destroy(other.gameObject);
+		}
 	}
 
 	private void reduceTimer(){
