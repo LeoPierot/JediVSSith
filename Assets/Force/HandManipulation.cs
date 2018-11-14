@@ -76,7 +76,6 @@ public class HandManipulation : MonoBehaviour
         }
         else if (GrabGripUp())
         {
-            Debug.Log(pickedObject);
             if (pickedObject)
             {
                 if (isRightHand)
@@ -91,7 +90,6 @@ public class HandManipulation : MonoBehaviour
                 }
                 pickedObject = null;
             }
-            Debug.Log(pickedObject);
         }
         if (pickedObject)
         {
@@ -186,6 +184,7 @@ public class HandManipulation : MonoBehaviour
                 //pour tous les objets sous influence de la force, on...
                 foreach (Transform obj in m_ObjectsUnderForce)
                 {
+                    UnityEngine.Debug.Log("BROOH");
                     Rigidbody releasedObjectRb = obj.GetComponent<Rigidbody>();
                     if (releasedObjectRb)
                     {
@@ -197,14 +196,17 @@ public class HandManipulation : MonoBehaviour
 
                         //calcule le direction moyenne de la main sur les x dernières frames, not used lol
                         Vector3 forceDirection = Vector3.zero;
+                        Vector3 lastPosition = m_HandManipulating.position;
                         foreach (Vector3 handPosition in m_LastHandPositions)
                         {
-                            forceDirection += handPosition;
+                            forceDirection += lastPosition - handPosition;
+                            lastPosition = handPosition;
                         }
                         forceDirection /= m_LastHandPositions.Count;
 
+
                         //on ajoute la nouvelle force calculée à l'objet. Actually no but whatever
-                        releasedObjectRb.velocity += (((m_HandManipulating.position - m_LastHandPosition) * 1000));
+                        releasedObjectRb.velocity += (forceDirection * 10000);
                         releasedObjectRb.useGravity = objectUsingGravity;
                         obj.gameObject.AddComponent<SlowDownWithDistance>();
                     }
