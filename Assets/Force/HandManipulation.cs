@@ -27,6 +27,7 @@ public class HandManipulation : MonoBehaviour
     private Vector3                 m_LastHandPosition = Vector3.zero;
     private Queue<Vector3>          m_LastHandPositions = new Queue<Vector3>();
     [SerializeField] private bool   m_CarryingSaber = false;
+    private GameObject              m_ForceFocusedObject = null;
 
     void Start()
     {
@@ -36,14 +37,52 @@ public class HandManipulation : MonoBehaviour
 
     void Update()
     {
-        midiclorianManipulation();
-        humanManipulation();
+        MidiclorianManipulation();
+        HumanManipulation();
     }
 
-    void midiclorianManipulation()
+    void MidiclorianManipulation()
     {
         if(!m_CarryingSaber)
         {
+            //on envoie un rayon devant la main.
+            RaycastHit hit;
+            //si le rayon touche un objet...
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity))
+            {
+                //si on n'est pas déjà en train de manipuler un objet par la force...
+                if (m_ObjectsUnderForce.Count == 0)
+                {
+                    //si l'objet est attrapable
+                    if (hit.collider.CompareTag("Pickable"))
+                    {
+                        if (m_ForceFocusedObject)
+                        {
+                            if (hit.collider.gameObject != m_ForceFocusedObject)
+                            {
+                                m_ForceFocusedObject.GetComponent<Outline>().enabled = false;
+                                m_ForceFocusedObject = hit.collider.gameObject;
+                                m_ForceFocusedObject.GetComponent<Outline>().enabled = true;
+                            }
+                        }
+                        else
+                        {
+                            m_ForceFocusedObject = hit.collider.gameObject;
+                            m_ForceFocusedObject.GetComponent<Outline>().enabled = true;
+                        }
+
+                    }
+                }
+            }
+            else
+            {
+                if (m_ForceFocusedObject)
+                {
+                    m_ForceFocusedObject.GetComponent<Outline>().enabled = false;
+                    m_ForceFocusedObject = null;
+                }
+            }
+
             if (isRightHand)
             {
                 if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
@@ -67,7 +106,7 @@ public class HandManipulation : MonoBehaviour
 
     }
 
-    void humanManipulation()
+    void HumanManipulation()
     {
         if (GrabGripDown()) 
         {
