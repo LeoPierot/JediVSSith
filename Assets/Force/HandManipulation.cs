@@ -35,6 +35,12 @@ public class HandManipulation : MonoBehaviour
 
     void Update()
     {
+        midiclorianManipulation();
+        humanManipulation();
+    }
+
+    void midiclorianManipulation()
+    {
         if (isRightHand)
         {
             if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
@@ -53,10 +59,15 @@ public class HandManipulation : MonoBehaviour
                 StartCoroutine(ForceManipulationCoroutine());
             }
         }
-        
-        if (GrabGripDown())
+
+    }
+
+    void humanManipulation()
+    {
+        if (GrabGripDown()) 
         {
             pickedObject = pickableObject;
+            pickedObject.GetComponent<Rigidbody>().isKinematic = true;
         }
         else if (GrabGripUp())
         {
@@ -65,11 +76,12 @@ public class HandManipulation : MonoBehaviour
             {
                 if (isRightHand)
                 {
-
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonRightHand.GetVelocity(SteamVR_Input_Sources.RightHand);
                 }
                 else
                 {
+                    pickedObject.GetComponent<Rigidbody>().isKinematic = false;
                     pickedObject.GetComponent<Rigidbody>().velocity = SteamVR_Input._default.inActions.SkeletonLeftHand.GetVelocity(SteamVR_Input_Sources.LeftHand);
                 }
                 pickedObject = null;
@@ -86,7 +98,8 @@ public class HandManipulation : MonoBehaviour
     {
         if (other.CompareTag("Pickable"))
         {
-            pickableObject = other.gameObject;
+            if (other.GetComponent<Collider>().bounds.size.x < 5 && other.GetComponent<Collider>().bounds.size.y < 5 && other.GetComponent<Collider>().bounds.size.z < 5)
+                pickableObject = other.gameObject;
         }
     }
 
