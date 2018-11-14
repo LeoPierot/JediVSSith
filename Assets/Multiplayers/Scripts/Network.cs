@@ -75,6 +75,10 @@ public class Network : NetworkDiscovery {
 	}
 
 	public void OnDestroy(){
+		DestroyGlobalNetwork();
+	}
+
+	public void DestroyGlobalNetwork(){
 		if(host){
 			print("Host stopped");
 			NetworkManager.singleton.StopHost();
