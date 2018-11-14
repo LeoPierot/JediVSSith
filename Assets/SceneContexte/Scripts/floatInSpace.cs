@@ -24,6 +24,6 @@ public class floatInSpace : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         Vector3 rotation = new Vector3(x_rot, y_rot, z_rot);
-        transform.Rotate(rotation * Time.deltaTime, Space.World);
+        transform.Rotate(rotation * Time.deltaTime, Space.World); 
     }
 }

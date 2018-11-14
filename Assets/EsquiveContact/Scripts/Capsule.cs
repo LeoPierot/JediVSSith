@@ -14,9 +14,6 @@ public class Capsule : MonoBehaviour {
 		 InvokeRepeating("LaunchProjectile", 2.0f, 1.5f);
 	}
 	
-	void update(){
-		GameObject.Find("[CameraRig]/ColliderJambes").transform.rotation = Quaternion.Euler(0, this.transform.rotation.y,0);
-	}
 
 	void LaunchProjectile() {
 		this.transform.LookAt(camera.transform);
@@ -24,6 +21,5 @@ public class Capsule : MonoBehaviour {
 		Rigidbody instance = Instantiate(projectile, this.transform.position + this.transform.forward + this.transform.right*rand, Quaternion.identity);
 		instance.tag = "damage";
 		instance.velocity = bulletSpeed*this.transform.forward;
-		Destroy(instance.gameObject, 10f);
 	}
 }
