@@ -33,8 +33,8 @@ public class CollisionPlayer : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collision collision){
-		if(collision.gameObject.tag == "damage"){
+	void OnTriggerEnter(Collider other){
+		if(other.gameObject.tag == "damage"){
 		life -= 1;
 		timeToRegen += timeRoRegenValue;
 
@@ -49,7 +49,7 @@ public class CollisionPlayer : MonoBehaviour {
 		else if(life <= 0){
 		}
 
-		Destroy(collision.rigidbody.gameObject);
+		Destroy(other.gameObject);
 		}
 	}
 
