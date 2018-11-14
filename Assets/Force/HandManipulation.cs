@@ -25,7 +25,8 @@ public class HandManipulation : MonoBehaviour
     private SteamVR_Input_Sources   m_ManipulatingHandIndex;
     private List<Transform>         m_ObjectsUnderForce = new List<Transform>();
     private Vector3                 m_LastHandPosition = Vector3.zero;
-    private Queue<Vector3>           m_LastHandPositions = new Queue<Vector3>();
+    private Queue<Vector3>          m_LastHandPositions = new Queue<Vector3>();
+    [SerializeField] private bool   m_CarryingSaber = false;
 
     void Start()
     {
@@ -41,24 +42,28 @@ public class HandManipulation : MonoBehaviour
 
     void midiclorianManipulation()
     {
-        if (isRightHand)
+        if(!m_CarryingSaber)
         {
-            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+            if (isRightHand)
             {
-                m_HandManipulating = RightHand;
-                m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
-                StartCoroutine(ForceManipulationCoroutine());
+                if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.RightHand))
+                {
+                    m_HandManipulating = RightHand;
+                    m_ManipulatingHandIndex = SteamVR_Input_Sources.RightHand;
+                    StartCoroutine(ForceManipulationCoroutine());
+                }
+            }
+            else
+            {
+                if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
+                {
+                    m_HandManipulating = LeftHand;
+                    m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
+                    StartCoroutine(ForceManipulationCoroutine());
+                }
             }
         }
-        else
-        {
-            if (SteamVR_Input._default.inActions.GrabPinch.GetStateDown(SteamVR_Input_Sources.LeftHand))
-            {
-                m_HandManipulating = LeftHand;
-                m_ManipulatingHandIndex = SteamVR_Input_Sources.LeftHand;
-                StartCoroutine(ForceManipulationCoroutine());
-            }
-        }
+        
 
     }
 
