@@ -206,7 +206,7 @@ public class HandManipulation : MonoBehaviour
 
 
                         //on ajoute la nouvelle force calculée à l'objet. Actually no but whatever
-                        releasedObjectRb.velocity += (forceDirection * 10000);
+                        releasedObjectRb.velocity += (forceDirection * 20000);
                         releasedObjectRb.useGravity = objectUsingGravity;
                         obj.gameObject.AddComponent<SlowDownWithDistance>();
                     }
