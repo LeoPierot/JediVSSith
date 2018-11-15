@@ -13,7 +13,7 @@ public class SabreController : MonoBehaviour
 
     void Update()
     {
-        if (SteamVR_Input._default.inActions.Teleport.GetStateDown(SteamVR_Input_Sources.RightHand))
+        if (SteamVR_Input._default.inActions.TouchPadNorth.GetStateDown(SteamVR_Input_Sources.RightHand))
         {
             LaserSwordScript lss = GetComponent<LaserSwordScript>();
             if (lss.state == 0)
