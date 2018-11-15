@@ -4630,6 +4630,11 @@ Prefab:
       propertyPath: m_Name
       value: Manequin
       objectReference: {fileID: 0}
+    - target: {fileID: 114983429622323114, guid: 42835c8b6f88e304884261933a666b02,
+        type: 2}
+      propertyPath: camera
+      value: 
+      objectReference: {fileID: 1746910565}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 42835c8b6f88e304884261933a666b02, type: 2}
   m_IsPrefabAsset: 0

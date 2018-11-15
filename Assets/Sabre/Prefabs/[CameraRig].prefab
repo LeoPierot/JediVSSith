@@ -1829,7 +1829,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1654441255247606}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4997349120333194}
@@ -2941,7 +2941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5fb0ca93b55ef4b8d54b512b103341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poseAction: {fileID: 11400000, guid: 6b0fa69b7b9981f45a9ad61fa3364cde, type: 2}
+  poseAction: {fileID: 0}
   inputSource: 2
   origin: {fileID: 0}
   onTransformUpdated:
@@ -3061,7 +3061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f6c0d7b5a00aa4a8d38a09a0480032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonAction: {fileID: 11400000, guid: 09f43fef4ba003c4596470ab316c09b2, type: 2}
+  skeletonAction: {fileID: 0}
   inputSource: 1
   rangeOfMotion: 0
   skeletonRoot: {fileID: 4603826410929070}
@@ -3081,7 +3081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5fb0ca93b55ef4b8d54b512b103341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poseAction: {fileID: 11400000, guid: 6b0fa69b7b9981f45a9ad61fa3364cde, type: 2}
+  poseAction: {fileID: 0}
   inputSource: 1
   origin: {fileID: 0}
   onTransformUpdated:
@@ -3143,7 +3143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f6c0d7b5a00aa4a8d38a09a0480032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonAction: {fileID: 11400000, guid: a6dc88747d09dba42ba8967e6f6ab535, type: 2}
+  skeletonAction: {fileID: 0}
   inputSource: 2
   rangeOfMotion: 0
   skeletonRoot: {fileID: 4431533035788788}

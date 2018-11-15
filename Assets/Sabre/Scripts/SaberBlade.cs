@@ -33,13 +33,10 @@ public class SaberBlade : MonoBehaviour {
 
     void OnTriggerEnter(Collider collider)
     {
-        Debug.Log(m_Direction.normalized);
-        collider.gameObject.GetComponent<Rigidbody>().velocity = m_Direction.normalized * BladeStrength;
-        
-        hapticSignal.Execute(timeBeforeActivation, Duration, Frequency, Amplitude, SteamVR_Input_Sources.RightHand);
-        if (collider.CompareTag("damage"))
+        Rigidbody rb = collider.gameObject.GetComponent<Rigidbody>();
+        if (rb)
         {
-            
+            collider.gameObject.GetComponent<Rigidbody>().velocity = m_Direction * BladeStrength;
         }
     }
 
