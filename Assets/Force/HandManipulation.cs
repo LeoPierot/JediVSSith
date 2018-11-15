@@ -111,8 +111,11 @@ public class HandManipulation : MonoBehaviour
     {
         if (GrabGripDown()) 
         {
-            pickedObject = pickableObject;
-            pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+            if (pickableObject)
+            {
+                pickedObject = pickableObject;
+                pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+            }
         }
         else if (GrabGripUp())
         {
@@ -224,7 +227,6 @@ public class HandManipulation : MonoBehaviour
                 //pour tous les objets sous influence de la force, on...
                 foreach (Transform obj in m_ObjectsUnderForce)
                 {
-                    UnityEngine.Debug.Log("BROOH");
                     Rigidbody releasedObjectRb = obj.GetComponent<Rigidbody>();
                     if (releasedObjectRb)
                     {

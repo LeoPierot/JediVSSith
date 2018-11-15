@@ -3208,21 +3208,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac6829859150f8441b4c1ba88c40cdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
-  isRightHand: 1
-  LeftHand: {fileID: 775477897}
-  RightHand: {fileID: 870482912}
-  meanHandMovement: 10
-  m_CarryingSaber: 0
---- !u!65 &870482915
-=======
   isRightHand: 0
   LeftHand: {fileID: 939944308}
   RightHand: {fileID: 507556181}
   meanHandMovement: 40
   m_CarryingSaber: 0
 --- !u!65 &939944310
->>>>>>> 97ed6c634f60dad7233484493ffc83e00098dd3b
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 65370941720468026, guid: bf1c19cf2e2422f45b0a07470865665b,
@@ -3256,47 +3247,6 @@ MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 114414201296202920, guid: bf1c19cf2e2422f45b0a07470865665b,
     type: 2}
-<<<<<<< HEAD
-  m_PrefabInternal: {fileID: 877748551}
---- !u!4 &908441035 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400000, guid: d8cf9ba52095a4f4bb35e68774cfa634,
-    type: 3}
-  m_PrefabInternal: {fileID: 1652062258}
---- !u!21 &923745474
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - PixelSnap: 0
-    - _EnableExternalAlpha: 0
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-=======
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 939944307}
   m_Enabled: 1
@@ -3327,7 +3277,6 @@ Material:
       m_Calls: []
     m_TypeName: Valve.VR.SteamVR_Behaviour_PoseEvent, Assembly-CSharp, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
->>>>>>> 97ed6c634f60dad7233484493ffc83e00098dd3b
 --- !u!1 &947280307
 GameObject:
   m_ObjectHideFlags: 0
@@ -6890,13 +6839,6 @@ Transform:
   m_Father: {fileID: 1001838555}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
-<<<<<<< HEAD
---- !u!1 &1746910565 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1150979330696642, guid: 4d293c8e162f3874b982baadd71153d2,
-    type: 2}
-  m_PrefabInternal: {fileID: 1366279504}
-=======
 --- !u!1 &1730198028
 GameObject:
   m_ObjectHideFlags: 0
@@ -6958,7 +6900,6 @@ Transform:
   m_Father: {fileID: 1338253281}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
->>>>>>> 97ed6c634f60dad7233484493ffc83e00098dd3b
 --- !u!1 &1765959937
 GameObject:
   m_ObjectHideFlags: 0

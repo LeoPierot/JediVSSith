@@ -47,8 +47,8 @@ public class CollisionPlayer : MonoBehaviour {
 			blood.GetComponent<CanvasGroup>().alpha = fade;
 		}
 		else if(life <= 0){
+            
 		}
-
 		Destroy(other.gameObject);
 		}
 	}
