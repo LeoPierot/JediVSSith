@@ -31,16 +31,19 @@ public class Communication : MonoBehaviour {
 		if(!this.InitializeCommunication()){
 			return;
 		}
-		Debug.Log("Voice listening initialized");
 	}
 
 	void Update(){
 
 		foreach (voiceEvent element in voiceEvents)
-		{
-			if (Input.GetKeyDown(element.key.ToString())) {
-				element.actionEvent.Invoke();
-			}
+        {
+            if (element.key != '\0' && element.key != ' ')
+            {
+                if (Input.GetKeyDown(element.key.ToString()))
+                {
+                    element.actionEvent.Invoke();
+                }
+            }
 		}
 	}
 

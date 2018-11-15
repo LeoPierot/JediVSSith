@@ -53,7 +53,7 @@ namespace DigitalRuby.LaserSword
 
         private LaserSwordBladeCreatorScript creationScript;
 
-        private int state; // 0 = off, 1 = on, 2 = turning off, 3 = turning on
+        public int state; // 0 = off, 1 = on, 2 = turning off, 3 = turning on
         private GameObject temporaryBladeStart;
         private float bladeDir; // 1 = up, -1 = down
         private float bladeTime;

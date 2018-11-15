@@ -6,18 +6,16 @@ using DigitalRuby.LaserSword;
 
 public class SabreController : MonoBehaviour
 {
-
-
     void Start()
+    {
+    }
+    public void Open()
     {
         GetComponent<LaserSwordScript>().Activate();
     }
-    void Update()
+    public void Close()
     {
-        //if (
-        {
-        }
+        GetComponent<LaserSwordScript>().Deactivate();
     }
-
 } 
 
