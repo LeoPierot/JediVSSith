@@ -115,12 +115,14 @@ public class HandManipulation : MonoBehaviour
             {
                 pickedObject = pickableObject;
                 pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+                //pickedObject.AddComponent<ShouldNotDamagePlayer>().PlayerToIgnore = transform.parent;
             }
         }
         else if (GrabGripUp())
         {
             if (pickedObject)
             {
+                //Destroy(pickedObject.GetComponent<ShouldNotDamagePlayer>());
                 if (isRightHand)
                 {
                     pickedObject.GetComponent<Rigidbody>().isKinematic = false;
@@ -142,10 +144,12 @@ public class HandManipulation : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Pickable"))
+        if (other.gameObject.tag == "Pickable")
         {
             if (other.GetComponent<Collider>().bounds.size.x < 5 && other.GetComponent<Collider>().bounds.size.y < 5 && other.GetComponent<Collider>().bounds.size.z < 5)
+            {
                 pickableObject = other.gameObject;
+            }
         }
     }
 
@@ -180,6 +184,7 @@ public class HandManipulation : MonoBehaviour
         m_ManipulationMode = MANIPULATION_MODE.FORCE;
 
         bool objectUsingGravity = false;
+
         while(m_ManipulationMode == MANIPULATION_MODE.FORCE)
         {
 
@@ -211,6 +216,10 @@ public class HandManipulation : MonoBehaviour
                                 //on relie la main et l'objet par un spring joint.
                                 AddAndConfigureSpringJoint(CaughtObjectRb);
                             }
+                            if (!hit.collider.GetComponent<ShouldNotDamagePlayer>())
+                            {
+                                hit.collider.gameObject.AddComponent<ShouldNotDamagePlayer>().PlayerToIgnore = transform.parent;
+                            }
                         }
 
                         m_ObjectsUnderForce.Add(hit.collider.transform);
@@ -234,6 +243,10 @@ public class HandManipulation : MonoBehaviour
                         if (obj.GetComponent<SpringJoint>())
                         {
                             Destroy(obj.GetComponent<SpringJoint>());
+                        }
+                        if(obj.GetComponent<ShouldNotDamagePlayer>())
+                        {
+                            Destroy(obj.GetComponent<ShouldNotDamagePlayer>());
                         }
 
                         //calcule le direction moyenne de la main sur les x dernières frames, not used lol

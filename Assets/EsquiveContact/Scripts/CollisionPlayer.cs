@@ -34,23 +34,35 @@ public class CollisionPlayer : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		if(other.gameObject.tag == "damage"){
-		life -= 1;
-		timeToRegen += timeRoRegenValue;
+		if(other.gameObject.tag == "Pickable"){
+            ShouldNotDamagePlayer script = other.GetComponent<ShouldNotDamagePlayer>();
+            if (script && script.PlayerToIgnore == transform)
+            {
+                return;
+            }
+            else
+            {
+                life -= 1;
+                timeToRegen += timeRoRegenValue;
 
-		if(life < maxLife && life >lifeSeuil1){
-			fade = 0.5f;
-			blood.GetComponent<CanvasGroup>().alpha = fade;
-		}
-		else if(life < lifeSeuil2 && life > 0){
-			fade = 0.8f;
-			blood.GetComponent<CanvasGroup>().alpha = fade;
-		}
-		else if(life <= 0){
-            
-		}
-		Destroy(other.gameObject);
-		}
+                if (life < maxLife && life > lifeSeuil1)
+                {
+                    fade = 0.5f;
+                    blood.GetComponent<CanvasGroup>().alpha = fade;
+                }
+                else if (life < lifeSeuil2 && life > 0)
+                {
+                    fade = 0.8f;
+                    blood.GetComponent<CanvasGroup>().alpha = fade;
+                }
+                else if (life <= 0)
+                {
+
+                }
+                Destroy(other.gameObject);
+            }
+        }
+		
 	}
 
 	private void reduceTimer(){
