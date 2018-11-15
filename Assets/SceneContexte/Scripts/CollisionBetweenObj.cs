@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public class CollisionBetweenObj : MonoBehaviour
 {
-
     public AudioSource source;
 
     // Use this for initialization
@@ -30,12 +29,7 @@ public class CollisionBetweenObj : MonoBehaviour
     /// <param name="col"></param>
     void OnCollisionEnter(Collision col)
     {
-        // Todo : ecrire les différents conditions lors de la collision 
-        if (col.gameObject.name == "Zone_Fight")
-        {
-            source.Play();
-        }
-        else
+        if (!source.isPlaying)
         {
             source.Play();
         }
