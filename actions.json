@@ -36,6 +36,10 @@
       "requirement": "optional"
     },
     {
+      "name": "/actions/default/in/TrackpadNorth",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
