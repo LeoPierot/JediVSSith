@@ -31,7 +31,7 @@ public class Communication : MonoBehaviour {
 		if(!this.InitializeCommunication()){
 			return;
 		}
-		Debug.Log("Communication initialized");
+		Debug.Log("Voice listening initialized");
 	}
 
 	void Update(){
@@ -58,10 +58,10 @@ public class Communication : MonoBehaviour {
 			return false;
 		}
 
-		foreach (var item in keywords)
-		{
-			print(item);
-		}
+		// foreach (var item in keywords)
+		// {
+		// 	print(item);
+		// }
 
 		this.speachApi = new KeywordRecognizer(this.keywords.ToArray());
 		this.speachApi.OnPhraseRecognized += OnVoiceRecognition;
